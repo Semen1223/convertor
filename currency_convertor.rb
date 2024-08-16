@@ -1,37 +1,41 @@
+# frozen_string_literal: true
+
+# Local class for currency conversion with rates from API.
 class CurrencyConvertor
   CONVERT_TO_USD = {
     'UAH' => 0.036,
     'EUR' => 1.11,
     'GBP' => 1.29,
     'PLN' => 0.25,
-    'CHF' => 1.12,
-  }
+    'CHF' => 1.12
+  }.freeze
 
-  def self.convert(currency, amount, precision = 2)
-    unless CONVERT_TO_USD.key?(currency)
-      return false
-    end
+  class << self
+    def convert(currency, amount, precision = 2)
+      return false unless CONVERT_TO_USD.key?(currency)
 
-    begin
-      if amount.is_a?(Array)
-        converted_amounts = amount.map do |value|
-          convert_amount(value, currency, precision)
+      begin
+        if amount.is_a?(Array)
+          converted_amounts = amount.map do |value|
+            convert_amount(value, currency, precision)
+          end
+          return converted_amounts
+        else
+          return convert_amount(amount, currency, precision)
         end
-        return converted_amounts
-      else
-        return convert_amount(amount, currency, precision)
+      rescue StandardError
+        return false
       end
-    rescue StandardError
-      return false
     end
-  end
 
-  private
+    private
 
-  def self.convert_amount(value, currency, precision)
-    return false unless value.is_a?(Numeric)
-    rate = CONVERT_TO_USD[currency]
-    converted_value = value * rate
-    converted_value.round(precision)
+    def convert_amount(value, currency, precision)
+      return false unless value.is_a?(Numeric)
+
+      rate = CONVERT_TO_USD[currency]
+      converted_value = value * rate
+      converted_value.round(precision)
+    end
   end
 end
