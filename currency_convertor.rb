@@ -2,14 +2,6 @@
 
 # Local class for currency conversion with rates from API.
 class CurrencyConvertor
-  CONVERT_TO_USD = {
-    'UAH' => 0.036,
-    'EUR' => 1.11,
-    'GBP' => 1.29,
-    'PLN' => 0.25,
-    'CHF' => 1.12
-  }.freeze
-
   class << self
     def convert(currency, amount, precision = 2)
       return false unless CONVERT_TO_USD.key?(currency)
