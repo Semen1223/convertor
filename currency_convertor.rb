@@ -16,7 +16,7 @@ class CurrencyConvertor
           return convert_amount(amount, currency, precision)
         end
       rescue StandardError
-        return false
+        nil
       end
     end
 
